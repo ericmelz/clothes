@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wardrobe Index</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>Wardrobe</h1>
+    <nav>
+      <a href="index.html" class="active">Index</a>
+      <a href="item.html">Details</a>
+      <a href="README.html">Help</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="controls">
+      <div class="control">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Search titles, notes, or filenames…">
+      </div>
+      <div class="control">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="">All</option>
+        </select>
+      </div>
+      <div class="control">
+        <label for="sort">Sort</label>
+        <select id="sort">
+          <option value="title-asc">Title (A→Z)</option>
+          <option value="title-desc">Title (Z→A)</option>
+          <option value="category-asc">Category (A→Z)</option>
+          <option value="category-desc">Category (Z→A)</option>
+        </select>
+      </div>
+      <div class="control small">
+        <button id="export-notes">Export My Notes</button>
+        <label class="file-label">
+          Import Notes
+          <input id="import-notes" type="file" accept="application/json">
+        </label>
+      </div>
+    </section>
+
+    <section id="grid" class="grid"></section>
+    <template id="card-tpl">
+      <a class="card">
+        <div class="thumb-wrap">
+          <img loading="lazy" class="thumb" alt="">
+        </div>
+        <div class="meta">
+          <h3 class="title"></h3>
+          <p class="sub"></p>
+        </div>
+      </a>
+    </template>
+  </main>
+
+  <footer class="site-footer">
+    <p>Generated static site. Edit <code>data/items.json</code> or run <code>build/generate.py</code> to add items.</p>
+  </footer>
+
+  <script type="module" src="scripts/utils.js"></script>
+  <script type="module" src="scripts/main.js"></script>
+</body>
+</html>

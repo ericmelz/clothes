@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wardrobe Item</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1><a href="index.html">Wardrobe</a></h1>
+    <nav>
+      <a href="index.html">Index</a>
+      <a href="item.html" class="active">Details</a>
+      <a href="README.html">Help</a>
+    </nav>
+  </header>
+
+  <main class="container item-page">
+    <article id="item">
+      <div class="image-wrap">
+        <img id="image" class="hero" alt="">
+      </div>
+      <div class="item-meta">
+        <h2 id="title"></h2>
+        <p class="filename"><span id="category"></span> • <code id="filename"></code></p>
+        <div class="notes">
+          <h3>Notes</h3>
+          <p id="notes"></p>
+          <details>
+            <summary>Edit notes (saved only in this browser)</summary>
+            <textarea id="notes-edit" rows="5" placeholder="Add or change notes…"></textarea>
+            <div class="note-actions">
+              <button id="save-notes">Save</button>
+              <button id="reset-notes" class="secondary">Reset to default</button>
+            </div>
+          </details>
+        </div>
+        <div class="nav-links">
+          <a id="prev" href="#">← Prev</a>
+          <a id="next" href="#">Next →</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>Tip: To make permanent changes, edit <code>data/items.json</code> or re-run <code>build/generate.py</code>.</p>
+  </footer>
+
+  <script type="module" src="scripts/utils.js"></script>
+  <script type="module" src="scripts/item.js"></script>
+</body>
+</html>
