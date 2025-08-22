@@ -325,3 +325,104 @@ body {
         padding: 15px;
     }
 }
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #e4e4e7;
+        background-color: #18181b;
+    }
+    
+    .app-header h1 {
+        color: #f4f4f5;
+    }
+    
+    .app-header p {
+        color: #a1a1aa;
+    }
+    
+    /* Search and filters dark mode */
+    .search-input, .category-select {
+        background: #27272a;
+        border-color: #3f3f46;
+        color: #e4e4e7;
+    }
+    
+    .search-input:focus, .category-select:focus {
+        border-color: #60a5fa;
+    }
+    
+    /* Item cards dark mode */
+    .item-card {
+        background: #27272a;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .item-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+    
+    .item-title {
+        color: #f4f4f5;
+    }
+    
+    .item-category {
+        background: #1e40af;
+        color: #dbeafe;
+    }
+    
+    .tag {
+        background: #3f3f46;
+        color: #d4d4d8;
+    }
+    
+    /* Modal dark mode */
+    .modal-overlay {
+        background: rgba(0, 0, 0, 0.9);
+    }
+    
+    .modal-content {
+        background: #27272a;
+    }
+    
+    .close-button {
+        color: #a1a1aa;
+    }
+    
+    .close-button:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .item-info-panel h2 {
+        color: #f4f4f5;
+    }
+    
+    .category {
+        color: #a1a1aa;
+    }
+    
+    .tags-section h4, .notes-section h4 {
+        color: #f4f4f5;
+    }
+    
+    .tags .tag {
+        background: #1e40af;
+        color: #dbeafe;
+    }
+    
+    .notes-section p {
+        color: #d4d4d8;
+    }
+    
+    /* Loading, error, and no results dark mode */
+    .loading, .error, .no-results {
+        color: #a1a1aa;
+        background: #27272a;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Image thumbnails maintain light background for better contrast */
+    .item-thumbnail, .item-full-image {
+        background-color: #3f3f46;
+    }
+}
