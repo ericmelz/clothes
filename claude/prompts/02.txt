@@ -1,0 +1,2 @@
+The thumbnails are not appearing in the main page.
+See the attached screenshot.  Fix this.
