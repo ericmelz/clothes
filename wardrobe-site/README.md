@@ -17,13 +17,13 @@ source_photos/
 2. From the site root, install generator deps:
 
 ```
-pip install pillow pillow-heif
+uv add pillow pillow-heif
 ```
 
 3. Run the generator to convert images to WebP, create thumbnails, and build the data file:
 
 ```
-python build/generate.py --src ./source_photos --out .
+uv run python build/generate.py --src ./source_photos --out .
 ```
 
 4. Open `index.html` in a browser.
