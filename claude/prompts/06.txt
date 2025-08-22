@@ -1,0 +1,2 @@
+I want to deploy this on my server as a static website served by nginx.
+Can you create a static site such that I don't need to run a python server?

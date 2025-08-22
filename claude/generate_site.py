@@ -141,11 +141,38 @@ class WardrobeGenerator:
         
         print(f"\nGenerated {json_path} with {len(self.items)} items")
 
+    def generate_static_site(self):
+        """Copy files to create a static website that can be served directly by nginx"""
+        import shutil
+        
+        website_dir = self.output_dir / "website"
+        
+        # Copy JSON data to website directory
+        json_source = self.output_dir / "wardrobe_data.json"
+        json_dest = website_dir / "wardrobe_data.json"
+        if json_source.exists():
+            shutil.copy2(json_source, json_dest)
+            print(f"Copied JSON data to {json_dest}")
+        
+        # Copy images to website directory
+        images_source = self.output_dir / "images"
+        images_dest = website_dir / "images"
+        if images_source.exists():
+            if images_dest.exists():
+                shutil.rmtree(images_dest)
+            shutil.copytree(images_source, images_dest)
+            print(f"Copied images to {images_dest}")
+        
+        print("Static website structure created!")
+        print(f"Website ready for deployment at: {website_dir}")
+        print("You can now serve this directory with nginx or any web server.")
+
     def generate(self):
         """Main generation method"""
         print("Starting wardrobe site generation...")
         self.scan_source_photos()
         self.generate_json_data()
+        self.generate_static_site()
         print("Generation complete!")
 
 def main():

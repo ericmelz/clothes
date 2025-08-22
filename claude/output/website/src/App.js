@@ -4,7 +4,7 @@ const { useState, useEffect } = React;
 const ItemCard = ({ item, onClick }) => (
     <div className="item-card" onClick={() => onClick(item)}>
         <img 
-            src={`../${item.thumbnail}`} 
+            src={item.thumbnail} 
             alt={item.title}
             className="item-thumbnail"
         />
@@ -30,7 +30,7 @@ const ItemDetails = ({ item, onClose }) => {
                 <button className="close-button" onClick={onClose}>×</button>
                 <div className="item-details">
                     <img 
-                        src={`../${item.image}`} 
+                        src={item.image} 
                         alt={item.title}
                         className="item-full-image"
                     />
@@ -100,7 +100,7 @@ const App = () => {
 
     // Load wardrobe data
     useEffect(() => {
-        fetch('../wardrobe_data.json')
+        fetch('wardrobe_data.json')
             .then(response => response.json())
             .then(data => {
                 setWardrobeData(data);
