@@ -1,0 +1,32 @@
+In the folder source_photos, are a list of photos, with subdirectories
+for each type of clothes item (shirts, pants, etc).
+
+I want a static website that has an browsable and searchable index
+into my clothes and hyperlinks to details of my clothes. 
+The main page should contain controls for searching and filtering,
+and a list of items.
+
+The index page that lists the items should contain thumbnails of the items.
+
+Items should be clickable that lead to a details page for the clicked item.
+
+URLs for the items should be based on the name of the original file.
+
+Details should contain a large image of the item along with metadata including
+title, tags and notes.  title for this might be "Flower Jamaican
+Shirt". Notes would be something like "Good for Jamaican Party".
+Tags could be "Jamaican", "Party", "Festive", "Medium".
+
+I want to use a json file to maintain records about the items.
+
+The tech stack should use html, javascript, css and React.js.
+
+Write a generator to take the source images and generate
+a skeletong json file, thumbnails, and web-friendly images.
+
+Use python for the site generator.
+
+Use uv for the project management tool.
+
+This site may evolve to a full-blown backend so keep that it
+mind as you generate code.
