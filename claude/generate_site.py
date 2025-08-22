@@ -141,6 +141,19 @@ class WardrobeGenerator:
         
         print(f"\nGenerated {json_path} with {len(self.items)} items")
 
+    def create_favicon(self):
+        """Create a simple SVG favicon"""
+        favicon_content = '''<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+    <rect width="32" height="32" fill="#3498db"/>
+    <text x="16" y="20" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">W</text>
+</svg>'''
+        
+        website_dir = self.output_dir / "website"
+        favicon_path = website_dir / "favicon.svg"
+        with open(favicon_path, 'w') as f:
+            f.write(favicon_content)
+        print(f"Created favicon at {favicon_path}")
+
     def generate_static_site(self):
         """Copy files to create a static website that can be served directly by nginx"""
         import shutil
@@ -162,6 +175,9 @@ class WardrobeGenerator:
                 shutil.rmtree(images_dest)
             shutil.copytree(images_source, images_dest)
             print(f"Copied images to {images_dest}")
+        
+        # Create favicon
+        self.create_favicon()
         
         print("Static website structure created!")
         print(f"Website ready for deployment at: {website_dir}")

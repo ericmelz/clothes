@@ -101,13 +101,19 @@ const App = () => {
     // Load wardrobe data
     useEffect(() => {
         fetch('wardrobe_data.json')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 setWardrobeData(data);
                 setLoading(false);
             })
             .catch(error => {
                 console.error('Error loading wardrobe data:', error);
+                console.error('Response might be HTML instead of JSON. Check nginx configuration.');
                 setLoading(false);
             });
     }, []);
