@@ -1,0 +1,3 @@
+Here is a screenshot of the thumbnails.  It is cutting off the
+   tops and bottoms of the shirts.  Can you modify the aspect ratio such 
+  that the entire shirt is shown
