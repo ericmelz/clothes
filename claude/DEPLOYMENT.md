@@ -18,17 +18,9 @@ output/website/
     └── App.js             # React application
 ```
 
-## 🚀 Deployment Options
+## 🚀 Deployment
 
-### Option 1: Nginx (Recommended)
-
-1. **Copy files to your server**:
-   ```bash
-   # Upload the website directory to your server
-   rsync -avz output/website/ user@your-server:/var/www/wardrobe/
-   ```
-
-2. **Configure Nginx**:
+1. **Configure Nginx** (only needed once):
    ```bash
    # Copy the provided nginx config
    sudo cp nginx-wardrobe.conf /etc/nginx/sites-available/wardrobe
@@ -41,58 +33,21 @@ output/website/
    # - root /var/www/wardrobe;       # Update to your actual path
    ```
 
-3. **Enable the site**:
+1. **Copy files to your server**:
    ```bash
-   sudo ln -s /etc/nginx/sites-available/wardrobe /etc/nginx/sites-enabled/
-   sudo nginx -t  # Test configuration
-   sudo systemctl reload nginx
+   # Copy site to nginx-data repo
+   rsync -avz --delete output/website/ $HOME/Data/code/nginx-data/www/ericmelz.site
+
+   # Push site using github actions
+   pushd $HOME/Data/code/nginx-data
+   git status
+   git add *
+   git status
+   git commit -m"Updated clothes site"
+   git push
+   popd
    ```
 
-### Option 2: Apache
-
-Create a `.htaccess` file in your website directory:
-
-```apache
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.html [L]
-
-# Enable compression
-<IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/plain
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/xml
-    AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE application/xhtml+xml
-    AddOutputFilterByType DEFLATE application/rss+xml
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
-</IfModule>
-
-# Cache static assets
-<IfModule mod_expires.c>
-    ExpiresActive on
-    ExpiresByType image/jpg "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType application/pdf "access plus 1 month"
-    ExpiresByType text/javascript "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-</IfModule>
-```
-
-### Option 3: Static Site Hosts
-
-Upload the `output/website/` directory to any of these services:
-
-- **Netlify**: Drag and drop the folder at [netlify.com](https://netlify.com)
-- **Vercel**: Connect your Git repository at [vercel.com](https://vercel.com)
-- **GitHub Pages**: Push to a GitHub repository and enable Pages
-- **AWS S3 + CloudFront**: For scalable hosting
 
 ## 🔄 Updates and Regeneration
 
