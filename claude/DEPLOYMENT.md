@@ -23,14 +23,13 @@ output/website/
 1. **Configure Nginx** (only needed once):
    ```bash
    # Copy the provided nginx config
-   sudo cp nginx-wardrobe.conf /etc/nginx/sites-available/wardrobe
-   
-   # Edit the configuration file
-   sudo nano /etc/nginx/sites-available/wardrobe
-   
-   # Update these lines:
-   # - server_name your-domain.com;  # Replace with your domain
-   # - root /var/www/wardrobe;       # Update to your actual path
+   cp nginx-wardrobe.conf ~/Data/code/nginx-data/conf/sites-available/ericmelz.site.conf
+   pushd $HOME/Data/code/nginx-data
+   git status
+   git add *
+   git commit -m"Updated ericmelz.site to serve clothes"
+   git push
+   popd
    ```
 
 1. **Copy files to your server**:
