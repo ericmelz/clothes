@@ -59,8 +59,17 @@ To update your website with new photos:
    ```
 3. **Upload updated files**:
    ```bash
-   # Upload only changed files
-   rsync -avz --delete output/website/ user@your-server:/var/www/wardrobe/
+   # Copy site to nginx-data repo
+   rsync -avz --delete output/website/ $HOME/Data/code/nginx-data/www/ericmelz.site
+
+   # Push site using github actions
+   pushd $HOME/Data/code/nginx-data
+   git status
+   git add *
+   git status
+   git commit -m"Updated clothes site"
+   git push
+   popd
    ```
 
 ## 🛠 Customization for Production
@@ -81,15 +90,6 @@ To update your website with new photos:
 - X-Frame-Options
 - X-XSS-Protection
 - X-Content-Type-Options
-
-### SSL/HTTPS Setup
-
-For production, enable HTTPS:
-
-1. **Get SSL certificate** (Let's Encrypt recommended):
-   ```bash
-   sudo certbot --nginx -d your-domain.com
-   ```
 
 2. **Uncomment HTTPS section** in nginx config and update paths
 
