@@ -34,17 +34,8 @@ output/website/
 
 1. **Copy files to your server**:
    ```bash
-   # Copy site to nginx-data repo
-   rsync -avz --delete output/website/ $HOME/Data/code/nginx-data/www/ericmelz.site
-
-   # Push site using github actions
-   pushd $HOME/Data/code/nginx-data
-   git status
-   git add *
-   git status
-   git commit -m"Updated clothes site"
-   git push
-   popd
+   # Copy site to nginx-data repo and deploy to server
+   ./deploy.sh
    ```
 
 
@@ -59,17 +50,7 @@ To update your website with new photos:
    ```
 3. **Upload updated files**:
    ```bash
-   # Copy site to nginx-data repo
-   rsync -avz --delete output/website/ $HOME/Data/code/nginx-data/www/ericmelz.site
-
-   # Push site using github actions
-   pushd $HOME/Data/code/nginx-data
-   git status
-   git add *
-   git status
-   git commit -m"Updated clothes site"
-   git push
-   popd
+   ./deploy.sh
    ```
 
 ## 🛠 Customization for Production
