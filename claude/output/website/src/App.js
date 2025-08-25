@@ -168,7 +168,12 @@ const App = () => {
         <div className="app">
             <header className="app-header">
                 <h1>My Wardrobe Collection!</h1>
-                <p>{wardrobeData.metadata.total_items} items in your wardrobe</p>
+                <p>
+                    {filteredItems.length === wardrobeData.metadata.total_items 
+                        ? `${wardrobeData.metadata.total_items} items in your wardrobe`
+                        : `${filteredItems.length} out of ${wardrobeData.metadata.total_items} items shown`
+                    }
+                </p>
             </header>
 
             <SearchFilters 

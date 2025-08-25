@@ -1,0 +1,7 @@
+At the top of the site, I see the message "79 items in your wardrobe".
+When I search, the number of items displayed is less than the total
+number of items.  For example, if I type "hawaiian" in the search box,
+I see 4 items.  Can you modify the message to say "<x> out of <total> items shown",
+where <x> is the number of items in the search results, and <total> is the total
+number of items in the database?  If all items, are shown, show the
+original message: "<total> items in your wardrobe"
