@@ -32,7 +32,7 @@
       "thumbnail": "images/thumbs/IMG_7110.jpg",
       "image": "images/full/IMG_7110.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Hawaiian","Trip:Cabo Cruise","Day:5","Color:Blue","Maker:Johari","Pattern:Flowers"
       ],
       "notes": "",
       "created_date": 1755967906.0
@@ -74,7 +74,7 @@
       "thumbnail": "images/thumbs/IMG_7130.jpg",
       "image": "images/full/IMG_7130.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Color:Red"
       ],
       "notes": "",
       "created_date": 1755972939.0
@@ -172,7 +172,7 @@
       "thumbnail": "images/thumbs/IMG_7131.jpg",
       "image": "images/full/IMG_7131.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Club","Trip:Cabo Cruise","Color:Blue","Occasion:Dance","Party:Dance"
       ],
       "notes": "",
       "created_date": 1755972942.0
@@ -214,7 +214,7 @@
       "thumbnail": "images/thumbs/IMG_7111.jpg",
       "image": "images/full/IMG_7111.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Hawaiian","Trip:Cabo Cruise","Day:3","Color:Multicolor","Maker:Amongst Others","Party:Mexican","Pattern:Flowers","Occasion:Dinner"
       ],
       "notes": "",
       "created_date": 1755967904.0
@@ -298,9 +298,9 @@
       "thumbnail": "images/thumbs/IMG_7120.jpg",
       "image": "images/full/IMG_7120.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Club","Trip:Cabo Cruise","Color:Blue","Party:80s","Maker:Positano"
       ],
-      "notes": "",
+	"notes": "Furry band shirt, somewhat crusty",
       "created_date": 1755972910.0
     },
     {
@@ -340,7 +340,7 @@
       "thumbnail": "images/thumbs/IMG_7116.jpg",
       "image": "images/full/IMG_7116.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Tee","Trip:Cabo Cruise","Color:Green","Maker:Kingsted","Day:2"
       ],
       "notes": "",
       "created_date": 1755972900.0
@@ -396,7 +396,7 @@
       "thumbnail": "images/thumbs/IMG_7117.jpg",
       "image": "images/full/IMG_7117.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Smart Casual","Trip:Cabo Cruise","Color:Black","Maker:Under Armour","Day:1","Occasion:Dinner"
       ],
       "notes": "",
       "created_date": 1755972902.0
@@ -438,9 +438,9 @@
       "thumbnail": "images/thumbs/IMG_7121.jpg",
       "image": "images/full/IMG_7121.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Club","Trip:Cabo Cruise","Color:Black","Party:70s"
       ],
-      "notes": "",
+	"notes": "",
       "created_date": 1755972912.0
     },
     {
@@ -535,8 +535,8 @@
       "category": "shirts",
       "thumbnail": "images/thumbs/IMG_7118.jpg",
       "image": "images/full/IMG_7118.jpg",
-      "tags": [
-        "Shirts"
+	"tags": [
+            "Shirts","Style:Smart Casual","Trip:Cabo Cruise","Color:Green","Maker:Banana Republic","Day:5", "Occasion:Dinner"
       ],
       "notes": "",
       "created_date": 1755972905.0
@@ -606,7 +606,7 @@
       "thumbnail": "images/thumbs/IMG_7114.jpg",
       "image": "images/full/IMG_7114.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Smart Casual","Trip:Cabo Cruise","Color:White","Party:White","Maker:Banana Republic"
       ],
       "notes": "",
       "created_date": 1755972895.0
@@ -676,7 +676,7 @@
       "thumbnail": "images/thumbs/IMG_7115.jpg",
       "image": "images/full/IMG_7115.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Hawaiian","Trip:Cabo Cruise","Color:Blue","Maker:H&M","Day:3","Pattern:Fish"
       ],
       "notes": "",
       "created_date": 1755972898.0
@@ -732,7 +732,7 @@
       "thumbnail": "images/thumbs/IMG_7119.jpg",
       "image": "images/full/IMG_7119.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Hawaiian","Trip:Cabo Cruise","Day:4","Color:Blue","Maker:H&M","Party:Jamaican","Pattern:Flowers","Occasion:Dinner"
       ],
       "notes": "",
       "created_date": 1755972907.0
@@ -844,7 +844,7 @@
       "thumbnail": "images/thumbs/IMG_7112.jpg",
       "image": "images/full/IMG_7112.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Tee","Trip:Cabo Cruise","Color:White","Maker:Veiisar","Day:1"
       ],
       "notes": "",
       "created_date": 1755972892.0
@@ -942,7 +942,7 @@
       "thumbnail": "images/thumbs/IMG_7109.jpg",
       "image": "images/full/IMG_7109.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Smart Casual","Trip:Cabo Cruise","Color:Black","Maker:Van Heusen","Day:2","Occasion:Dinner"
       ],
       "notes": "",
       "created_date": 1755967474.0
@@ -1040,7 +1040,7 @@
       "thumbnail": "images/thumbs/IMG_7113.jpg",
       "image": "images/full/IMG_7113.jpg",
       "tags": [
-        "Shirts"
+          "Shirts","Style:Tee","Trip:Cabo Cruise","Color:Navy","Maker:Kingsted","Day:6"
       ],
       "notes": "",
       "created_date": 1755968406.0

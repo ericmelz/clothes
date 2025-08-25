@@ -167,7 +167,7 @@ const App = () => {
     return (
         <div className="app">
             <header className="app-header">
-                <h1>My Wardrobe Collection</h1>
+                <h1>My Wardrobe Collection!</h1>
                 <p>{wardrobeData.metadata.total_items} items in your wardrobe</p>
             </header>
 
