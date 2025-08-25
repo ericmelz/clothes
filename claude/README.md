@@ -14,22 +14,24 @@ A static website generator and browser for your clothing collection. Takes photo
 ## Project Structure
 
 ```
-source_photos/          # Original photos organized by category
-    Shirts/            # Shirt photos (HEIC format)
-    Pants/             # Pants photos (HEIC format)
-    [Other Categories]/
-output/                 # Generated website files
-    wardrobe_data.json # Item metadata
-    images/            # Processed images
-        thumbs/        # Thumbnail images (300x300)
-        full/          # Full-size web images (max 1200px)
-    website/           # Static website files
-        index.html     # Main HTML page
-        styles.css     # CSS styles
+source-data/
+    source_photos/          # Original photos organized by category
+        wardrobe_data.json  # Item metadata
+        Shirts/             # Shirt photos (HEIC format)
+        Pants/              # Pants photos (HEIC format)
+        [Other Categories]/
+output/                     # Generated website files - also copied to website/
+    wardrobe_data.json      # Item metadata
+    images/                 # Processed images
+        thumbs/             # Thumbnail images (300x300)
+        full/               # Full-size web images (max 1200px)
+    website/                # Static website files
+        index.html          # Main HTML page
+        styles.css          # CSS styles
         src/
-            App.js     # React application
-generate_site.py       # Site generator script
-serve_website.py       # Local development server
+            App.js          # React application
+generate_site.py            # Site generator script
+serve_website.py            # Local development server
 ```
 
 ## Setup
@@ -60,7 +62,7 @@ serve_website.py       # Local development server
 
 ### Adding Metadata
 
-Edit `output/wardrobe_data.json` to customize:
+Edit `source_data/wardrobe_data.json` to customize:
 - **titles**: Change from generic "IMG_7055" to "Blue Striped Shirt"
 - **tags**: Add descriptive tags like "casual", "work", "summer"
 - **notes**: Add detailed notes like "Great for beach parties"
