@@ -20,6 +20,7 @@ register_heif_opener()
 class WardrobeGenerator:
     def __init__(self, source_dir: str = "source_photos", output_dir: str = "output"):
         self.source_dir = Path(source_dir)
+        self.photos_dir = self.source_dir / "photos"
         self.output_dir = Path(output_dir)
         self.images_dir = self.output_dir / "images"
         self.thumbs_dir = self.images_dir / "thumbs"
@@ -103,14 +104,14 @@ class WardrobeGenerator:
 
     def scan_source_photos(self):
         """Scan the source_photos directory and process all images"""
-        if not self.source_dir.exists():
-            print(f"Source directory {self.source_dir} not found!")
+        if not self.photos_dir.exists():
+            print(f"Source directory {self.photos_dir} not found!")
             return
 
         # Supported image extensions
         image_extensions = {'.heic', '.jpg', '.jpeg', '.png', '.webp'}
         
-        for category_dir in self.source_dir.iterdir():
+        for category_dir in self.photos_dir.iterdir():
             if not category_dir.is_dir():
                 continue
                 
@@ -123,8 +124,25 @@ class WardrobeGenerator:
                     if item:
                         self.items.append(item)
 
+    def read_json_data(self) -> Dict[str, Any]:
+        json_path = self.source_dir / "wardrobe_data.json"
+        with open (json_path) as f:
+            data = json.load(f)
+        id_to_items = {}
+        for item in data['items']:
+            id_to_items[item['id']] = item
+        return id_to_items
+
     def generate_json_data(self):
         """Generate the JSON data file"""
+        items = []
+        id_to_items = self.read_json_data()
+        for item in self.items:
+            if item['id'] in id_to_items:
+                items.append(id_to_items[item['id']])
+            else:
+                items.append(item)
+            
         data = {
             "metadata": {
                 "version": "1.0",
@@ -132,7 +150,7 @@ class WardrobeGenerator:
                 "total_items": len(self.items)
             },
             "categories": list(set(item["category"] for item in self.items)),
-            "items": self.items
+            "items": items
         }
         
         json_path = self.output_dir / "wardrobe_data.json"
