@@ -18,7 +18,7 @@ from typing import Dict, List, Any
 register_heif_opener()
 
 class WardrobeGenerator:
-    def __init__(self, source_dir: str = "source_photos", output_dir: str = "output"):
+    def __init__(self, source_dir: str = "source_data", output_dir: str = "output"):
         self.source_dir = Path(source_dir)
         self.photos_dir = self.source_dir / "photos"
         self.output_dir = Path(output_dir)
