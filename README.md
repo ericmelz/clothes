@@ -6,8 +6,6 @@ Notebooks for development are in `notebooks` directory.
 
 Main code is in `claude`.
 
-`wardrobe-site` is a failed experiment from ChatGPT.
-
 Uses uv for package management.
 
 ## Usage:
