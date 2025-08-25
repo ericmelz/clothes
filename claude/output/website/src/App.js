@@ -95,10 +95,29 @@ const App = () => {
     const [wardrobeData, setWardrobeData] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    
+    // Function to update URL parameters
+    const updateURL = (search, category) => {
+        const params = new URLSearchParams();
+        if (search) params.set('search', search);
+        if (category) params.set('category', category);
+        
+        const newURL = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
+        window.history.pushState({}, '', newURL);
+    };
+    
+    // Function to read URL parameters on load
+    const readURLParams = () => {
+        const params = new URLSearchParams(window.location.search);
+        const search = params.get('search') || '';
+        const category = params.get('category') || '';
+        setSearchTerm(search);
+        setSelectedCategory(category);
+    };
     const [selectedItem, setSelectedItem] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Load wardrobe data
+    // Load wardrobe data and URL parameters on mount
     useEffect(() => {
         fetch('wardrobe_data.json')
             .then(response => {
@@ -110,6 +129,8 @@ const App = () => {
             .then(data => {
                 setWardrobeData(data);
                 setLoading(false);
+                // Read URL parameters after data loads
+                readURLParams();
             })
             .catch(error => {
                 console.error('Error loading wardrobe data:', error);
@@ -117,6 +138,13 @@ const App = () => {
                 setLoading(false);
             });
     }, []);
+    
+    // Update URL when search term or category changes
+    useEffect(() => {
+        if (wardrobeData) { // Only update URL after data is loaded
+            updateURL(searchTerm, selectedCategory);
+        }
+    }, [searchTerm, selectedCategory, wardrobeData]);
 
     // Filter items based on search and category
     const filteredItems = wardrobeData?.items?.filter(item => {
@@ -148,6 +176,8 @@ const App = () => {
             } else {
                 setSelectedItem(null);
             }
+            // Also read URL parameters when navigating back/forward
+            readURLParams();
         };
 
         window.addEventListener('popstate', handlePopState);
