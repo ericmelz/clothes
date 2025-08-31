@@ -1,0 +1,8 @@
+I would like to support a more advanced query language.
+Currently, the search is matching across all fields, and the whole search string is applied to every field.
+I want to support boolean queries on individual tags, and support tags with multiple words.
+
+Examples:
+* Trip:"Cabo Cruise" and Day:1 and not Occasion:Dinner 
+* Trip:"Cabo Cruise" and (Day:3 or Day:4) and not Occasion:Dinner
+
