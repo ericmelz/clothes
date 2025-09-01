@@ -6,6 +6,7 @@ This script scans the source_photos directory, processes images,
 creates thumbnails, and generates a JSON file with clothing item metadata.
 """
 
+import shutil
 import json
 import os
 from pathlib import Path
@@ -159,59 +160,70 @@ class WardrobeGenerator:
         
         print(f"\nGenerated {json_path} with {len(self.items)} items")
 
-    def create_favicon(self):
-        """Create a simple SVG favicon"""
-        favicon_content = '''<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-    <rect width="32" height="32" fill="#3498db"/>
-    <text x="16" y="20" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">W</text>
-</svg>'''
-        
-        website_dir = self.output_dir / "website"
-        favicon_path = website_dir / "favicon.svg"
-        with open(favicon_path, 'w') as f:
-            f.write(favicon_content)
-        print(f"Created favicon at {favicon_path}")
 
     def generate_static_site(self):
         """Copy files to create a static website that can be served directly by nginx"""
-        import shutil
-        
-        website_dir = self.output_dir / "website"
-        
-        # Copy JSON data to website directory
-        json_source = self.output_dir / "wardrobe_data.json"
-        json_dest = website_dir / "wardrobe_data.json"
-        if json_source.exists():
-            shutil.copy2(json_source, json_dest)
-            print(f"Copied JSON data to {json_dest}")
-        
-        # Copy images to website directory
-        images_source = self.output_dir / "images"
-        images_dest = website_dir / "images"
-        if images_source.exists():
-            if images_dest.exists():
-                shutil.rmtree(images_dest)
-            shutil.copytree(images_source, images_dest)
-            print(f"Copied images to {images_dest}")
-        
-        # Create favicon
-        self.create_favicon()
-        
-        print("Static website structure created!")
-        print(f"Website ready for deployment at: {website_dir}")
-        print("You can now serve this directory with nginx or any web server.")
+        # copy index.html
+        source = Path("site_template") / "per_person_assets"
+        dest = self.output_dir 
+        shutil.copytree(source, dest, dirs_exist_ok=True)
+
+        print("Static website created!")
+
 
     def generate(self):
         """Main generation method"""
         print("Starting wardrobe site generation...")
+        self.generate_static_site()
         self.scan_source_photos()
         self.generate_json_data()
-        self.generate_static_site()
         print("Generation complete!")
 
+
+
+def create_favicon(output_dir: Path):
+    """Create a simple SVG favicon"""
+    favicon_content = '''<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+    <rect width="32" height="32" fill="#3498db"/>
+    <text x="16" y="20" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">W</text>
+</svg>'''
+        
+    website_dir = output_dir / "website"
+    favicon_path = Path(output_dir) / "favicon.svg"
+    with open(favicon_path, 'w') as f:
+        f.write(favicon_content)
+    print(f"Created favicon at {favicon_path}")
+
+
 def main():
-    generator = WardrobeGenerator()
-    generator.generate()
+    output_dir = Path('output')
+    site_template_dir = Path('site_template')
+
+    try:
+        shutil.rmtree(output_dir)
+    except FileNotFoundError:
+        pass
+    
+    output_dir.mkdir(exist_ok=True)
+
+    # copy index.html, styles.css, favicon?
+    create_favicon(output_dir)
+
+    # Copy index.html and styles.css to website directory
+    for file in ['index.html', 'styles.css']:
+        source = site_template_dir / file
+        dest = output_dir / file
+        shutil.copy2(source, dest)
+        print(f"Copied {source} to {dest}")
+
+#    people = ['eric', 'randi']
+    people = ['eric']
+    for person in people:
+        source_path = f'source_data/{person}s-clothes'
+        output_path = f'{output_dir}/{person}s-clothes'
+        WardrobeGenerator(source_dir=source_path, output_dir=output_path).generate()
+
+
 
 if __name__ == "__main__":
     main()
