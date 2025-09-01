@@ -22,7 +22,7 @@ def serve_website(port=8000):
     handler = http.server.SimpleHTTPRequestHandler
     
     with socketserver.TCPServer(("", port), handler) as httpd:
-        print(f"Serving wardrobe website at http://localhost:{port}/website/")
+        print(f"Serving wardrobe website at http://localhost:{port}/")
         print("Press Ctrl+C to stop the server")
         try:
             httpd.serve_forever()

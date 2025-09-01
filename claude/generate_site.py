@@ -216,8 +216,7 @@ def main():
         shutil.copy2(source, dest)
         print(f"Copied {source} to {dest}")
 
-#    people = ['eric', 'randi']
-    people = ['eric']
+    people = ['eric', 'randi']
     for person in people:
         source_path = f'source_data/{person}s-clothes'
         output_path = f'{output_dir}/{person}s-clothes'
