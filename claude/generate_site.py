@@ -14,18 +14,22 @@ from PIL import Image
 from pillow_heif import register_heif_opener
 import re
 from typing import Dict, List, Any
+from datetime import datetime
 
 # Register HEIF/HEIC support
 register_heif_opener()
 
 class WardrobeGenerator:
-    def __init__(self, source_dir: str = "source_data", output_dir: str = "output"):
+    def __init__(self, source_dir: str = "source_data", output_dir: str = "output",
+                 site_template_dir: str = "site_template", skip_image_processing=False):
         self.source_dir = Path(source_dir)
         self.photos_dir = self.source_dir / "photos"
         self.output_dir = Path(output_dir)
         self.images_dir = self.output_dir / "images"
         self.thumbs_dir = self.images_dir / "thumbs"
         self.full_dir = self.images_dir / "full"
+        self.site_template_dir = Path(site_template_dir)
+        self.skip_image_processing = skip_image_processing
         
         # Create output directories
         self.output_dir.mkdir(exist_ok=True)
@@ -53,28 +57,32 @@ class WardrobeGenerator:
             # Open and convert image
             with Image.open(image_path) as img:
                 # Convert HEIC to RGB if needed
-                if img.mode != 'RGB':
-                    img = img.convert('RGB')
+                if not self.skip_image_processing:
+                    if img.mode != 'RGB':
+                        img = img.convert('RGB')
                 
                 # Generate filename without HEIC extension
                 base_name = image_path.stem
                 slug = self.generate_slug_from_filename(image_path.name)
                 
                 # Create thumbnail (300x300, maintain aspect ratio)
-                thumb = img.copy()
-                thumb.thumbnail((300, 300), Image.Resampling.LANCZOS)
-                thumb_path = self.thumbs_dir / f"{base_name}.jpg"
-                thumb.save(thumb_path, "JPEG", quality=85)
+                if not self.skip_image_processing:
+                    thumb = img.copy()
+                    thumb.thumbnail((300, 300), Image.Resampling.LANCZOS)
+                    thumb_path = self.thumbs_dir / f"{base_name}.jpg"
+                    thumb.save(thumb_path, "JPEG", quality=85)
                 
                 # Create full-size web image (max 1200px width, maintain aspect ratio)
-                full = img.copy()
-                if full.width > 1200:
-                    ratio = 1200 / full.width
-                    new_height = int(full.height * ratio)
-                    full = full.resize((1200, new_height), Image.Resampling.LANCZOS)
+                if not self.skip_image_processing:
+                    full = img.copy()
+                    if full.width > 1200:
+                        ratio = 1200 / full.width
+                        new_height = int(full.height * ratio)
+                        full = full.resize((1200, new_height), Image.Resampling.LANCZOS)
                 
                 full_path = self.full_dir / f"{base_name}.jpg"
-                full.save(full_path, "JPEG", quality=90)
+                if not self.skip_image_processing:
+                    full.save(full_path, "JPEG", quality=90)
                 
                 # Create item record
                 item = {
@@ -164,7 +172,7 @@ class WardrobeGenerator:
     def generate_static_site(self):
         """Copy files to create a static website that can be served directly by nginx"""
         # copy index.html
-        source = Path("site_template") / "per_person_assets"
+        source = self.site_template_dir / "per_person_assets"
         dest = self.output_dir 
         shutil.copytree(source, dest, dirs_exist_ok=True)
 
@@ -174,10 +182,12 @@ class WardrobeGenerator:
     def generate(self):
         """Main generation method"""
         print("Starting wardrobe site generation...")
+        start = datetime.now()
         self.generate_static_site()
         self.scan_source_photos()
         self.generate_json_data()
-        print("Generation complete!")
+        end = datetime.now()
+        print(f"Generation complete! {(end - start).seconds} seconds elapsed.")
 
 
 
@@ -220,7 +230,9 @@ def main():
     for person in people:
         source_path = f'source_data/{person}s-clothes'
         output_path = f'{output_dir}/{person}s-clothes'
-        WardrobeGenerator(source_dir=source_path, output_dir=output_path).generate()
+        site_template_path = f'site_template'
+        WardrobeGenerator(source_dir=source_path, output_dir=output_path,
+                          site_template_dir=site_template_path).generate()
 
 
 
