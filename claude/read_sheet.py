@@ -18,7 +18,7 @@ PEOPLE = ["eric", "randi"]
 # Output root directory
 OUTPUT_ROOT = Path("output")
 
-# Expected base headers (row 2), produced by the writer script
+# Expected base headers (row 1), produced by the writer script
 BASE_HEADERS = [
     "ID",
     "Title",
@@ -45,8 +45,8 @@ def get_google_services():
     Expects credentials.json in the working directory on first run.
     """
     creds = None
-    token_path = "token_readonly.json"   # separate cache from your writer token if you like
-    creds_path = "credentials.json"
+    token_path = "../token_readonly.json"   # separate cache from your writer token if you like
+    creds_path = "../credentials.json"
 
     if os.path.exists(token_path):
         creds = Credentials.from_authorized_user_file(token_path, SCOPES)
@@ -127,8 +127,8 @@ def read_all_values(sheets, spreadsheet_id: str, sheet_title: str) -> List[List[
 def locate_tag_block(header_row1: List[str], header_row2: List[str]) -> Tuple[int, List[str]]:
     """
     Using the two-row header:
-      - Row 1 contains 'Tags' in the first tag column (others blank).
-      - Row 2 contains base headers then per-tag-type headers.
+      - Row 1 contains base_headers and 'Tags' in the first tag column (others blank).
+      - Row 2 contains blanks then per-tag-type headers.
     Returns (tag_start_index, tag_type_headers)
     """
     # Find "Tags" cell in row 1; if not present, assume no tag block.
@@ -146,12 +146,12 @@ def locate_tag_block(header_row1: List[str], header_row2: List[str]) -> Tuple[in
     return tag_start, tag_type_headers
 
 
-def map_base_columns(header_row2: List[str]) -> Dict[str, int]:
+def map_base_columns(header_row1: List[str]) -> Dict[str, int]:
     """
     Map expected base headers (exact match) to their indices, if present.
     """
     name_to_idx = {}
-    for idx, name in enumerate(header_row2):
+    for idx, name in enumerate(header_row1):
         if name in BASE_HEADERS:
             name_to_idx[name] = idx
     return name_to_idx
@@ -242,7 +242,7 @@ def sheet_to_items(values: List[List[str]]) -> List[Dict]:
     row2 = values[1]
 
     tag_start, tag_types = locate_tag_block(row1, row2)
-    base_idx = map_base_columns(row2)
+    base_idx = map_base_columns(row1)
 
     items: List[Dict] = []
     for row in values[2:]:

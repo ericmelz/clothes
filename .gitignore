@@ -1,5 +1,6 @@
 credentials.json
 token.json
+token_readonly.json
 output
 .DS_Store
 *~
