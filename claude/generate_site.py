@@ -408,13 +408,14 @@ class WardrobeGenerator:
         """Generate the JSON data file"""
         items = []
 
-        # TODO: replace this with reading from Google Sheet
-        # TODO: detect category conflicts
-#        id_to_items = self.read_json_data()
         id_to_items = self.read_json_data_from_google_sheet()
+        changed_categories = []
         for item in self.items:
             if item['id'] in id_to_items:
-                items.append(id_to_items[item['id']])
+                replacement_item = id_to_items[item['id']]
+                if replacement_item['category'] != item['category']:
+                    changed_categories.append((item['id'], item['category'], replacement_item['category']))
+                items.append(replacement_item)
             else:
                 items.append(item)
             
@@ -433,6 +434,12 @@ class WardrobeGenerator:
             json.dump(data, f, indent=2, ensure_ascii=False)
         
         print(f"\nGenerated {json_path} with {len(self.items)} items")
+
+        if len(changed_categories) > 0:
+            print("\n*** WARNING: The Following categories have been changed on the spreadsheet:")
+            for id, original, new in changed_categories:
+                print(f"  {id=} {original=} {new=}")
+
 
 
     def generate_static_site(self):
