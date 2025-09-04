@@ -125,6 +125,8 @@ class WardrobeGenerator:
             pageSize=10,
         ).execute()
         files = resp.get("files", [])
+
+        # TODO return None if not files
         if not files:
             raise FileNotFoundError(
                 f"Sheet named '{filename}' not found in folder {folder_id}."
@@ -289,6 +291,8 @@ class WardrobeGenerator:
         filename = self.metadata_sheetname
         print(f"Looking for '{filename}' in folder {self.parent_folder_id}...")
         spreadsheet_id = self.find_sheet_in_folder(drive, self.parent_folder_id, filename)
+        # TODO: record spreadsheet_id in self.spreadsheet_id
+        # TODO: if spreadsheet_id is none: return empty dict
 
         sheet_title = self.get_first_sheet_title(sheets, spreadsheet_id)
         values = self.read_all_values(sheets, spreadsheet_id, sheet_title)
@@ -459,6 +463,7 @@ class WardrobeGenerator:
         self.generate_static_site()
         self.scan_source_photos()
         self.generate_json_data()
+        # TODO: self.write_google_sheet() - creates new sheet if it doesn't exist, otherwise updates
         end = datetime.now()
         print(f"Generation complete! {(end - start).seconds} seconds elapsed.")
 
