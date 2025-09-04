@@ -1,14 +1,53 @@
 [project]
-name = "clothes"
+name = "wardrobe"
 version = "0.1.0"
-description = "Add your description here"
+description = "Wardrobe management system for clothing inventory"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "google-api-python-client>=2.181.0",
     "google-auth-httplib2>=0.2.0",
     "google-auth-oauthlib>=1.2.2",
-    "jupyter>=1.1.1",
     "pillow>=11.3.0",
     "pillow-heif>=1.1.0",
 ]
+
+[project.optional-dependencies]
+jupyter = ["jupyter>=1.1.1", "ipywidgets>=8.0.0"]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=22.0",
+    "isort>=5.0",
+    "mypy>=1.0"
+]
+test = [
+    "pytest>=7.0",
+    "pytest-mock>=3.0"
+]
+
+[project.scripts]
+wardrobe = "wardrobe.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.black]
+line-length = 100
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
