@@ -2,7 +2,6 @@
 
 import argparse
 import sys
-from pathlib import Path
 
 from .core.generator import WardrobeGenerator, generate_wardrobe_sites
 

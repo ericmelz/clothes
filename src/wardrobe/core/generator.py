@@ -83,14 +83,19 @@ class WardrobeGenerator:
         """Read data from Google Sheet and return as item dictionary."""
         if not self.metadata_sheetname:
             return {}
-            
-        return self.sheets_reader.read_sheet_data(
-            parent_folder_id=self.parent_folder_id,
-            sheet_name=self.metadata_sheetname
-        )
+
+        try:
+            return self.sheets_reader.read_sheet_data(
+                parent_folder_id=self.parent_folder_id,
+                sheet_name=self.metadata_sheetname
+            )
+
+        except FileNotFoundError as e:
+            print(f"Warning: {e}")
+            return {}
 
     def read_json_data(self) -> Dict[str, Any]:
-        """Read data from local JSON file."""
+        """Read data from local JSON file and return as item dictionary, or empty dict if not found."""
         json_path = self.source_dir / "wardrobe_data.json"
         if not json_path.exists():
             return {}
@@ -110,13 +115,22 @@ class WardrobeGenerator:
         """Generate the JSON data file."""
         items = []
 
-        # Try to get data from Google Sheets first, fall back to local JSON
-        try:
-            id_to_items = self.read_json_data_from_google_sheet()
-        except Exception as e:
-            print(f"Warning: Could not read from Google Sheets: {e}")
+        # Logic:
+        # 1. (prior to this method) Scan images directories to determine items we care about
+        # 2. Try to load data from sheet - if we get it, use for replacement data
+        # 3. If there is no sheet name provided, or if the sheet name is provided but doesn't exist, use json data
+        # 4. Replace items from image scan with items from sheet / json
+        #    4a. Notice when categories have changed - this suggests folder changes for those images
+        # 5. Attach header metadata to items
+        # 6. Write the json file
+        # 7. Output the list of category changes
+        #
+        # TODO: Refactor this so that it only outputs the data: (items, changed_categories)
+        # TODO: Downstream methods will output json and sheets
+        id_to_items = self.read_json_data_from_google_sheet()
+        if len(id_to_items) == 0:
             id_to_items = self.read_json_data()
-        
+
         changed_categories = []
         for item in self.items:
             if item['id'] in id_to_items:
