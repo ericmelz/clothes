@@ -1,0 +1,19 @@
+Create new code to write the sheet with the data that was generated in WardrobeGenerator.
+In WardrobeGenerator, use the SheetsWriter class.
+Update the SheetsWriter class to use SheetUtils.
+In WardrobeGenerator, modify generate_json_data to:
+* be renamed to generate_items_data
+* return the items instead of writing to the json file.
+* write the data to a file in a separate method calleed write_json_data_to_file
+* write the data to the spreadsheet using SheetsWriter
+
+In SheetWriter:
+* Create a new create_sheet method in the case where the sheet doesn't exist - returns the id of the newly-created sheet
+* Create a new create_or_update_sheet method - calls find_sheet_in_folder, then create_sheet if not found.  Return the sheet id
+* Create a new write_sheet_data method - takes sheet id, header rows, data rows and writes the data
+
+In SheetsWriter.create_sheet_and_write_data,
+* rename the create_sheet_and_write_data method to upsert_sheet_data
+* Use the newly-created methods to implement the upsert logic
+
+

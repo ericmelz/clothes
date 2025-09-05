@@ -236,7 +236,8 @@ def generate_wardrobe_sites(people: List[str] = None,
 
     # Clean output directory
     try:
-        shutil.rmtree(output_dir)
+        if not skip_image_processing:
+            shutil.rmtree(output_dir)
     except FileNotFoundError:
         pass
 

@@ -1,0 +1,2 @@
+Create a new file in src/wardrobe/google_sheets/sheet_utils.py and create a class named SheetUtils.
+Refactor the method SheetsReader.find_sheet_in_folder into SheetUtils.

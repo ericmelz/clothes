@@ -30,6 +30,11 @@ from wardrobe import WardrobeGenerator
 from wardrobe.google_sheets import SheetsReader, SheetsWriter
 ```
 
+### Deployment
+```bash
+src/deploy.sh
+```
+
 ## 📁 Project Structure
 - **`src/wardrobe/`** - Main package (formerly `claude/`)
 - **`tests/`** - Comprehensive test suite  
