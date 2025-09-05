@@ -16,7 +16,7 @@ def create_favicon(output_dir: Path):
     <rect width="32" height="32" fill="#3498db"/>
     <text x="16" y="20" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">W</text>
 </svg>'''
-        
+
     favicon_path = output_dir / "favicon.svg"
     with open(favicon_path, 'w') as f:
         f.write(favicon_content)
@@ -25,11 +25,11 @@ def create_favicon(output_dir: Path):
 
 class WardrobeGenerator:
     """Main class for generating wardrobe sites."""
-    
-    def __init__(self, 
-                 source_dir: str = "source_data", 
+
+    def __init__(self,
+                 source_dir: str = "source_data",
                  output_dir: str = "output",
-                 site_template_dir: str = "site_template", 
+                 site_template_dir: str = "site_template",
                  skip_image_processing: bool = False,
                  parent_folder_id: str = "1d1KFAo3jcomqzm05vpY5S_Vmbrh5_lyw",
                  readwrite_token_path: str = "../token.json",
@@ -59,11 +59,11 @@ class WardrobeGenerator:
         self.site_template_dir = Path(site_template_dir)
         self.parent_folder_id = parent_folder_id
         self.metadata_sheetname = metadata_sheetname
-        
+
         # Create output directories
         self.output_dir.mkdir(exist_ok=True)
         self.images_dir.mkdir(exist_ok=True)
-        
+
         # Initialize components
         self.auth = GoogleSheetsAuth(
             credentials_path=creds_path,
@@ -76,7 +76,7 @@ class WardrobeGenerator:
             full_dir=self.full_dir,
             skip_processing=skip_image_processing
         )
-        
+
         self.items = []
 
     def read_json_data_from_google_sheet(self) -> Dict[str, Any]:
@@ -99,7 +99,7 @@ class WardrobeGenerator:
         json_path = self.source_dir / "wardrobe_data.json"
         if not json_path.exists():
             return {}
-            
+
         with open(json_path) as f:
             data = json.load(f)
         id_to_items = {}
@@ -140,7 +140,7 @@ class WardrobeGenerator:
                 items.append(replacement_item)
             else:
                 items.append(item)
-            
+
         data = {
             "metadata": {
                 "version": "1.0",
@@ -150,11 +150,11 @@ class WardrobeGenerator:
             "categories": sorted(list(set(item["category"] for item in self.items))),
             "items": items
         }
-        
+
         json_path = self.output_dir / "wardrobe_data.json"
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
-        
+
         print(f"\nGenerated {json_path} with {len(self.items)} items")
 
         if len(changed_categories) > 0:
@@ -166,7 +166,7 @@ class WardrobeGenerator:
         """Copy files to create a static website that can be served directly by nginx."""
         # copy index.html
         source = self.site_template_dir / "per_person_assets"
-        dest = self.output_dir 
+        dest = self.output_dir
         if source.exists():
             shutil.copytree(source, dest, dirs_exist_ok=True)
             print("Static website created!")
@@ -184,9 +184,15 @@ class WardrobeGenerator:
         print(f"Generation complete! {(end - start).seconds} seconds elapsed.")
 
 
-def generate_wardrobe_sites(people: List[str] = None, 
-                          output_base: str = "output",
-                          site_template_dir: str = "site_template"):
+def generate_wardrobe_sites(people: List[str] = None,
+                            output_base: str = "output",
+                            site_template_dir: str = "site_template",
+                            source_base: Optional[str] = None,
+                            skip_image_processing: bool = False,
+                            readwrite_token_path: Optional[str] = None, \
+                            readonly_token_path: Optional[str] = None,
+                            creds_path: Optional[str] = None
+                            ):
     """
     Generate wardrobe sites for multiple people.
     
@@ -197,7 +203,7 @@ def generate_wardrobe_sites(people: List[str] = None,
     """
     if people is None:
         people = ['eric', 'randi']
-    
+
     output_dir = Path(output_base)
     site_template_dir = Path(site_template_dir)
 
@@ -206,7 +212,7 @@ def generate_wardrobe_sites(people: List[str] = None,
         shutil.rmtree(output_dir)
     except FileNotFoundError:
         pass
-    
+
     output_dir.mkdir(exist_ok=True)
 
     # Create favicon
@@ -224,14 +230,18 @@ def generate_wardrobe_sites(people: List[str] = None,
 
     # Generate sites for each person
     for person in people:
-        source_path = f'source_data/{person}s-clothes'
-        output_path = f'{output_dir}/{person}s-clothes'
+        source_path_str = f'{source_base}/{person}s-clothes'
+        output_path_str = f'{output_dir}/{person}s-clothes'
         site_template_path = str(site_template_dir)
-        
+
         generator = WardrobeGenerator(
-            source_dir=source_path, 
-            output_dir=output_path,
+            source_dir=source_path_str,
+            output_dir=output_path_str,
             site_template_dir=site_template_path,
+            skip_image_processing=skip_image_processing,
+            readonly_token_path=readonly_token_path,
+            readwrite_token_path=readwrite_token_path,
+            creds_path=creds_path,
             metadata_sheetname=f"{person}-wardrobe"
         )
         generator.generate()
