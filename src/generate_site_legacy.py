@@ -1,3 +1,4 @@
+# TODO: Is this file useful?  delete it if not.
 #!/usr/bin/env python3
 """
 Legacy generate_site.py - now imports from new modular structure.

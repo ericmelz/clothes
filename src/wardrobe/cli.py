@@ -1,3 +1,4 @@
+# TODO incorporate server and deploy functionality here
 """Command-line interface for wardrobe management."""
 
 import argparse

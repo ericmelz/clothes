@@ -1,3 +1,5 @@
+# TODO: is this file useful?  Delete it if not.  I think it's a duplicate of the other cli logic
+
 #!/usr/bin/env python3
 """
 Wardrobe Site Generator
