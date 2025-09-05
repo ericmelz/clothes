@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 
 from .auth import GoogleSheetsAuth
+from .sheet_utils import SheetUtils
 
 
 class SheetsWriter:
@@ -112,10 +113,18 @@ class SheetsWriter:
             rows.append(base_vals + tag_cols)
         return rows
 
-    def create_sheet_and_write_data(self, sheets, drive, title: str, header_rows: List[List[str]], 
-                                  data_rows: List[List[str]], num_base_cols: int,
-                                  num_tag_cols: int, parent_folder_id: Optional[str] = None) -> str:
-        """Create a new sheet and write data to it."""
+    def create_sheet(self, drive, title: str, parent_folder_id: Optional[str] = None) -> str:
+        """
+        Create a new empty Google Sheets spreadsheet.
+        
+        Args:
+            drive: Google Drive service object
+            title: Name of the spreadsheet
+            parent_folder_id: Optional folder ID to create sheet in
+            
+        Returns:
+            Spreadsheet ID of created sheet
+        """
         file_metadata = {
             "name": title,
             "mimeType": "application/vnd.google-apps.spreadsheet",
@@ -124,9 +133,41 @@ class SheetsWriter:
             file_metadata["parents"] = [parent_folder_id]
 
         created = drive.files().create(body=file_metadata, fields="id").execute()
+        return created["id"]
 
-        spreadsheet_id = created["id"]
+    def create_or_update_sheet(self, drive, title: str, parent_folder_id: Optional[str] = None) -> str:
+        """
+        Find existing sheet or create new one if not found.
+        
+        Args:
+            drive: Google Drive service object
+            title: Name of the spreadsheet
+            parent_folder_id: Optional folder ID to look in/create sheet in
+            
+        Returns:
+            Spreadsheet ID of found or created sheet
+        """
+        if not parent_folder_id:
+            return self.create_sheet(drive, title, parent_folder_id)
+            
+        try:
+            return SheetUtils.find_sheet_in_folder(drive, parent_folder_id, title)
+        except FileNotFoundError:
+            return self.create_sheet(drive, title, parent_folder_id)
 
+    def write_sheet_data(self, sheets, spreadsheet_id: str, header_rows: List[List[str]], 
+                        data_rows: List[List[str]], num_base_cols: int, num_tag_cols: int):
+        """
+        Write data to an existing Google Sheets spreadsheet.
+        
+        Args:
+            sheets: Google Sheets service object
+            spreadsheet_id: ID of the spreadsheet to write to
+            header_rows: Header rows to write
+            data_rows: Data rows to write
+            num_base_cols: Number of base columns for formatting
+            num_tag_cols: Number of tag columns for formatting
+        """
         # Write header rows + data
         values = header_rows + data_rows
         sheets.spreadsheets().values().update(
@@ -210,6 +251,12 @@ class SheetsWriter:
             body={"requests": requests}
         ).execute()
 
+    def upsert_sheet_data(self, sheets, drive, title: str, header_rows: List[List[str]],
+                         data_rows: List[List[str]], num_base_cols: int,
+                         num_tag_cols: int, parent_folder_id: Optional[str] = None) -> str:
+        """Create or update a sheet with data."""
+        spreadsheet_id = self.create_or_update_sheet(drive, title, parent_folder_id)
+        self.write_sheet_data(sheets, spreadsheet_id, header_rows, data_rows, num_base_cols, num_tag_cols)
         return spreadsheet_id
 
     def share_file(self, drive, file_id: str, email: str):
@@ -242,7 +289,7 @@ class SheetsWriter:
         base_headers, tag_type_headers, two_row_header = self.build_headers(type_key_to_display)
         data_rows = self.items_to_rows(items, base_headers, type_key_to_display)
 
-        spreadsheet_id = self.create_sheet_and_write_data(
+        spreadsheet_id = self.upsert_sheet_data(
             sheets=sheets,
             drive=drive,
             title=sheet_title,

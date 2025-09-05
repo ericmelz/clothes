@@ -6,7 +6,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Any, Optional
 
-from ..google_sheets import GoogleSheetsAuth, SheetsReader
+from ..google_sheets import GoogleSheetsAuth, SheetsReader, SheetsWriter
 from .image_processor import ImageProcessor
 
 
@@ -71,6 +71,7 @@ class WardrobeGenerator:
             readwrite_token_path=readwrite_token_path
         )
         self.sheets_reader = SheetsReader(self.auth)
+        self.sheets_writer = SheetsWriter(self.auth)
         self.image_processor = ImageProcessor(
             thumbs_dir=self.thumbs_dir,
             full_dir=self.full_dir,
@@ -111,8 +112,8 @@ class WardrobeGenerator:
         """Scan the source_photos directory and process all images."""
         self.items = self.image_processor.scan_photos_directory(self.photos_dir)
 
-    def generate_json_data(self):
-        """Generate the JSON data file."""
+    def generate_items_data(self):
+        """Generate items data with merged information from scanned files and existing data."""
         items = []
 
         # Logic:
@@ -121,12 +122,10 @@ class WardrobeGenerator:
         # 3. If there is no sheet name provided, or if the sheet name is provided but doesn't exist, use json data
         # 4. Replace items from image scan with items from sheet / json
         #    4a. Notice when categories have changed - this suggests folder changes for those images
-        # 5. Attach header metadata to items
-        # 6. Write the json file
-        # 7. Output the list of category changes
-        #
-        # TODO: Refactor this so that it only outputs the data: (items, changed_categories)
-        # TODO: Downstream methods will output json and sheets
+        # 5. Output the list of category changes
+        # 6. Attach header metadata to items
+        # 7. Write the json file
+        # 8. Write the spreadsheet
         id_to_items = self.read_json_data_from_google_sheet()
         if len(id_to_items) == 0:
             id_to_items = self.read_json_data()
@@ -141,13 +140,17 @@ class WardrobeGenerator:
             else:
                 items.append(item)
 
+        return items, changed_categories
+
+    def write_json_data_to_file(self, items: List[Dict[str, Any]]):
+        """Write items data to JSON file."""
         data = {
             "metadata": {
                 "version": "1.0",
                 "generated_at": f"{datetime.now()}",
-                "total_items": len(self.items)
+                "total_items": len(items)
             },
-            "categories": sorted(list(set(item["category"] for item in self.items))),
+            "categories": sorted(list(set(item["category"] for item in items))),
             "items": items
         }
 
@@ -155,12 +158,36 @@ class WardrobeGenerator:
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
-        print(f"\nGenerated {json_path} with {len(self.items)} items")
+        print(f"\nGenerated {json_path} with {len(items)} items")
 
+    def write_data_to_spreadsheet(self, items: List[Dict[str, Any]]):
+        """Write items data to Google Sheets."""
+        if not self.metadata_sheetname:
+            print("No metadata sheet name provided, skipping spreadsheet write")
+            return
+
+        print(f"\nWriting data to spreadsheet '{self.metadata_sheetname}'...")
+        try:
+            spreadsheet_id = self.sheets_writer.write_items_to_sheet(
+                items=items,
+                sheet_title=self.metadata_sheetname,
+                parent_folder_id=self.parent_folder_id
+            )
+            print(f"Successfully wrote data to spreadsheet: {spreadsheet_id}")
+        except Exception as e:
+            print(f"Error writing to spreadsheet: {e}")
+
+    def generate_and_write_items_data(self):
+        """Generate the JSON data file and write to spreadsheet."""
+        items, changed_categories = self.generate_items_data()
+        self.write_json_data_to_file(items)
+        self.write_data_to_spreadsheet(items)
+        
         if len(changed_categories) > 0:
             print("\n*** WARNING: The Following categories have been changed on the spreadsheet:")
             for id, original, new in changed_categories:
                 print(f"  {id=} {original=} {new=}")
+
 
     def generate_static_site(self):
         """Copy files to create a static website that can be served directly by nginx."""
@@ -179,7 +206,7 @@ class WardrobeGenerator:
         start = datetime.now()
         self.generate_static_site()
         self.scan_source_photos()
-        self.generate_json_data()
+        self.generate_and_write_items_data()
         end = datetime.now()
         print(f"Generation complete! {(end - start).seconds} seconds elapsed.")
 
