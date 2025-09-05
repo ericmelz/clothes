@@ -5,3 +5,19 @@ output
 .DS_Store
 *~
 __pycache__
+
+# Python package metadata
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE files
+.idea/
+.vscode/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
