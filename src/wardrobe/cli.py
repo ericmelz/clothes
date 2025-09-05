@@ -13,7 +13,7 @@ def main():
     """Main CLI entry point."""
     data_path = Path(os.getenv("HOME")) / "Data" / "wardrobe"
     code_path = Path(os.getenv("HOME")) / "Data" / "code"
-    source_data_path_str = str(code_path / "wardrobe" / "source_data")
+    source_data_path_str = str(data_path / "source_data")
 
     auth_path =  data_path / "auth"
     output_path_str = str(data_path / "output")
@@ -21,6 +21,8 @@ def main():
     creds_path_str = str(auth_path / "credentials.json")
     readwrite_token_path_str = str(auth_path / "token.json")
     readonly_token_path_str = str(auth_path / "token_readonly.json")
+
+    site_template_path_str = str(code_path / "clothes" / "src" / "site_template")
 
     parser = argparse.ArgumentParser(description="Wardrobe management system")
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
@@ -33,7 +35,7 @@ def main():
                             help='Source data directory')
     gen_parser.add_argument('--output', default=output_path_str,
                             help='Output directory')
-    gen_parser.add_argument('--template', default='site_template',
+    gen_parser.add_argument('--template', default=site_template_path_str,
                             help='Site template directory')
     gen_parser.add_argument('--skip-images', action='store_true',
                             help='Skip image processing')
@@ -48,7 +50,7 @@ def main():
     single_parser.add_argument('person', help='Person name')
     single_parser.add_argument('--source', default=source_data_path_str, help='Source data directory')
     single_parser.add_argument('--output', default=output_path_str, help='Output directory')
-    single_parser.add_argument('--template', default='site_template', help='Template directory')
+    single_parser.add_argument('--template', default=site_template_path_str, help='Template directory')
     single_parser.add_argument('--sheet', help='Google Sheets name')
     single_parser.add_argument('--skip-images', action='store_true', help='Skip image processing')
     single_parser.add_argument('--readwrite-token', default=readwrite_token_path_str,
@@ -68,6 +70,7 @@ def main():
             generate_wardrobe_sites(
                 people=args.people,
                 output_base=args.output,
+                source_base=args.source,
                 site_template_dir=args.template,
                 skip_image_processing=args.skip_images,
                 readwrite_token_path=readwrite_token_path_str,
