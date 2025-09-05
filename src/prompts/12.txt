@@ -1,0 +1,4 @@
+Do you have any suggestions for cleaning up this codebase?  I want it to be developer-friendly so that I can use jupyter notebooks to experiment with my 
+  python code.  I also feel that generate_site.py is getting a bit bloated and needs refactoring.  Also the directory named claude should probably be renamed to
+   src or something like that.  I also may want to write tests for the code such as testing readin and writing google sheets.  In general, I want the codebase 
+  to be clean and extensible.
