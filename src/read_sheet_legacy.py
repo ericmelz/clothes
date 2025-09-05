@@ -1,3 +1,4 @@
+# TODO get rid of this
 #!/usr/bin/env python3
 """
 Legacy read_sheet.py - now imports from new modular structure.

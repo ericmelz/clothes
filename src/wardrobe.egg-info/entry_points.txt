@@ -1,0 +1,2 @@
+[console_scripts]
+wardrobe = wardrobe.cli:main

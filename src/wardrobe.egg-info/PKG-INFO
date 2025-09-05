@@ -1,0 +1,90 @@
+Metadata-Version: 2.4
+Name: wardrobe
+Version: 0.1.0
+Summary: Wardrobe management system for clothing inventory
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: google-api-python-client>=2.181.0
+Requires-Dist: google-auth-httplib2>=0.2.0
+Requires-Dist: google-auth-oauthlib>=1.2.2
+Requires-Dist: pillow>=11.3.0
+Requires-Dist: pillow-heif>=1.1.0
+Provides-Extra: jupyter
+Requires-Dist: jupyter>=1.1.1; extra == "jupyter"
+Requires-Dist: ipywidgets>=8.0.0; extra == "jupyter"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0; extra == "dev"
+Requires-Dist: black>=22.0; extra == "dev"
+Requires-Dist: isort>=5.0; extra == "dev"
+Requires-Dist: mypy>=1.0; extra == "dev"
+Provides-Extra: test
+Requires-Dist: pytest>=7.0; extra == "test"
+Requires-Dist: pytest-mock>=3.0; extra == "test"
+
+# Wardrobe Management System
+
+A modular Python package for managing clothing inventory with Google Sheets integration, image processing, and static website generation.
+
+## 🚀 Quick Start
+
+### Installation
+```bash
+# Install with development tools and Jupyter support
+uv pip install -e ".[dev,jupyter]"
+```
+
+### Command Line Usage
+```bash
+# Generate wardrobe sites for all configured people
+wardrobe generate
+
+# Generate for a single person
+wardrobe generate-single eric --source source_data/erics-clothes
+```
+
+### Jupyter Development
+```bash
+# Start Jupyter for experimentation
+uv run jupyter notebook
+
+# Open notebooks in notebooks/ directory
+# Clean imports now available:
+from wardrobe import WardrobeGenerator
+from wardrobe.google_sheets import SheetsReader, SheetsWriter
+```
+
+## 📁 Project Structure
+- **`src/wardrobe/`** - Main package (formerly `claude/`)
+- **`tests/`** - Comprehensive test suite  
+- **`notebooks/`** - Jupyter notebooks for development
+- **`source_data/`** - Your clothing photos and metadata
+- **`scripts/`** - Development utilities
+
+## 🛠️ Development
+```bash
+# Run tests
+python scripts/run_tests.py
+
+# Format code
+black src/ tests/
+
+# Type checking  
+mypy src/
+```
+
+## 📖 Documentation
+See `src/README.md` for complete documentation including:
+- Detailed setup instructions
+- API documentation  
+- Google Sheets integration
+- Testing and development workflows
+- Troubleshooting guide
+
+## ✨ What's New
+This codebase has been refactored from a collection of scripts into a proper Python package:
+- ✅ Modular, testable code structure
+- ✅ Comprehensive test coverage
+- ✅ Clean imports for Jupyter notebooks
+- ✅ Command-line interface
+- ✅ Developer-friendly tools and documentation
