@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple, Any
 from datetime import datetime
 
 from .auth import GoogleSheetsAuth
+from .sheet_utils import SheetUtils
 
 
 # Expected base headers (row 1), produced by the writer script
@@ -26,32 +27,7 @@ class SheetsReader:
     def __init__(self, auth: GoogleSheetsAuth):
         """Initialize with authentication manager."""
         self.auth = auth
-    
-    def find_sheet_in_folder(self, drive, folder_id: str, filename: str) -> str:
-        """
-        Return the spreadsheet file ID for a file named `filename` within `folder_id`.
-        Raises FileNotFoundError if not found.
-        """
-        q = (
-            f"name = '{filename}' and "
-            f"'{folder_id}' in parents and "
-            f"mimeType = 'application/vnd.google-apps.spreadsheet' and "
-            f"trashed = false"
-        )
-        resp = drive.files().list(
-            q=q,
-            spaces="drive",
-            fields="files(id, name)",
-            pageSize=10,
-        ).execute()
-        files = resp.get("files", [])
 
-        if not files:
-            raise FileNotFoundError(
-                f"Sheet named '{filename}' not found in folder {folder_id}."
-            )
-        # If multiple, take the first
-        return files[0]["id"]
 
     def get_first_sheet_title(self, sheets, spreadsheet_id: str) -> str:
         """Get the title of the first sheet in a spreadsheet."""
@@ -217,7 +193,7 @@ class SheetsReader:
         sheets, drive = self.auth.get_readonly_services()
 
         print(f"Looking for '{sheet_name}' in folder {parent_folder_id}...")
-        spreadsheet_id = self.find_sheet_in_folder(drive, parent_folder_id, sheet_name)
+        spreadsheet_id = SheetUtils.find_sheet_in_folder(drive, parent_folder_id, sheet_name)
 
         sheet_title = self.get_first_sheet_title(sheets, spreadsheet_id)
         values = self.read_all_values(sheets, spreadsheet_id, sheet_title)
