@@ -13,10 +13,18 @@ uv pip install -e ".[dev,jupyter]"
 ### Command Line Usage
 ```bash
 # Generate wardrobe sites for all configured people
-wardrobe generate
+# alternative: uv run wardrobe generate (doesn't require pip install -e ".[dev,jupyter]")
+wardrobe generate  
 
 # Generate for a single person
 wardrobe generate-single eric --source source_data/erics-clothes
+```
+
+### Local webserver
+```
+uv run -m wardrobe.web.server
+
+# hit http://localhost:8000
 ```
 
 ### Jupyter Development

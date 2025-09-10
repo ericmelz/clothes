@@ -10,7 +10,7 @@ from pathlib import Path
 
 def serve_website(port=8000):
     """Serve the website from the output directory"""
-    output_dir = Path("output")
+    output_dir = Path("/Users/ericmelz/Data/wardrobe/output")
     
     if not output_dir.exists():
         print("Output directory not found. Please run generate_site.py first.")

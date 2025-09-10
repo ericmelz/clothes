@@ -79,8 +79,10 @@ def main():
             )
         elif args.command == 'generate-single':
             source_dir = args.source or f'source_data/{args.person}s-clothes'
-            output_dir = args.output or f'output/{args.person}s-clothes'
+            output_dir = f'{args.output}/{args.person}s-clothes'
             sheet_name = args.sheet or f'{args.person}-wardrobe'
+
+            print(f'*** {output_dir=}')
 
             generator = WardrobeGenerator(
                 source_dir=source_dir,
